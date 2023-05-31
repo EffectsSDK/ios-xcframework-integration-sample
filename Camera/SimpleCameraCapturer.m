@@ -2,8 +2,16 @@
 #import "SimpleCameraCapturer.h"
 
 #import <AVFoundation/AVFoundation.h>
+#import <CoreMotion/CMMotionManager.h>
 
 #import "SimpleCameraCapturer/SimpleCameraCapturerOutputBufferDelegate.h"
+
+static bool isVideoMirrored(AVCaptureVideoOrientation orientation)
+{
+	return
+		(AVCaptureVideoOrientationPortrait == orientation) ||
+		(AVCaptureVideoOrientationPortraitUpsideDown == orientation);
+}
 
 @implementation SimpleCameraCapturer
 {
@@ -11,8 +19,13 @@
     AVCaptureSession* _session;
     AVCaptureDeviceInput* _input;
     AVCaptureVideoDataOutput* _output;
+    AVCaptureConnection* _connection;
     SimpleCameraCapturerOutputBufferDelegate* _bufferDelegate;
     void (^_callback)(CMSampleBufferRef);
+	
+    NSOperationQueue* _operationQueue;
+    CMMotionManager* _motionManager;
+    AVCaptureVideoOrientation _currentOrientation;
 }
 
 -(id)initWithOutputCallback:(void(^)(CMSampleBufferRef))callback
@@ -21,11 +34,16 @@
     if (nil == self) {
         return nil;
     }
-    
+	
     _queue = dispatch_queue_create("com.tsvb.camera-queue", NULL);
     _session = nil;
     _callback = callback;
-    
+	
+    _operationQueue = [NSOperationQueue new];
+    _operationQueue.underlyingQueue = _queue;
+    _motionManager = [CMMotionManager new];
+    _currentOrientation = AVCaptureVideoOrientationPortrait;
+	
     return self;
 }
 
@@ -43,6 +61,47 @@
             [self->_session startRunning];
         }
     });
+	
+    if(!_motionManager.isAccelerometerAvailable) {
+        return;
+    }
+	
+    _motionManager.accelerometerUpdateInterval = 0.1;
+    [_motionManager startAccelerometerUpdatesToQueue:_operationQueue
+										 withHandler:^(
+            CMAccelerometerData* _Nullable accelerometerData, NSError* _Nullable error) {
+			
+        if (nil == accelerometerData){
+            return;
+        }
+			
+        double x = accelerometerData.acceleration.x;
+        double y = accelerometerData.acceleration.y;
+		
+        AVCaptureVideoOrientation orientation = self->_currentOrientation;
+        if (x >= 0.75) {
+            orientation = AVCaptureVideoOrientationLandscapeLeft;
+        }
+        else if(x <= -0.75) {
+            orientation = AVCaptureVideoOrientationLandscapeRight;
+        }
+        else if (y <= -0.75) {
+            orientation = AVCaptureVideoOrientationPortrait;
+        }
+        else if (y >= 0.75) {
+            orientation = AVCaptureVideoOrientationPortraitUpsideDown;
+        }
+			
+        if (orientation != self->_currentOrientation) {
+            self->_currentOrientation = orientation;
+            if (nil != self->_connection) {
+                [self->_session beginConfiguration];
+                self->_connection.videoOrientation = orientation;
+                self->_connection.videoMirrored = isVideoMirrored(orientation);
+                [self->_session commitConfiguration];
+            }
+        }
+    }];
 }
 
 -(void)stop
@@ -56,6 +115,8 @@
             [self->_session stopRunning];
         }
     });
+	
+    [_motionManager stopAccelerometerUpdates];
 }
 
 -(bool)setupCamera
@@ -80,8 +141,9 @@
             return false;
         }
         
-        AVCaptureDeviceInput* input = [AVCaptureDeviceInput deviceInputWithDevice:device
-                                                                            error:nil];
+        AVCaptureDeviceInput* input = [AVCaptureDeviceInput
+									   deviceInputWithDevice:device
+									   error:nil];
         if (nil == input) {
             return false;
         }
@@ -112,8 +174,9 @@
             return false;
         }
         
-        AVCaptureConnection* connection = [output connectionWithMediaType:mediaType];
-        connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+        _connection = [output connectionWithMediaType:mediaType];
+        _connection.videoOrientation = _currentOrientation;
+        _connection.videoMirrored = isVideoMirrored(_currentOrientation);
         
         [session commitConfiguration];
         _session = session;

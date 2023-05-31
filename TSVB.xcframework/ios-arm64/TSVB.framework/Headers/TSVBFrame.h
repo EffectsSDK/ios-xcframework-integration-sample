@@ -1,7 +1,11 @@
-#ifndef TOMSKSOFT_IOS_INCLUDE_TSVB_FRAME_H
-#define TOMSKSOFT_IOS_INCLUDE_TSVB_FRAME_H
+#ifndef TOMSKSOFT_INCLUDE_TSVB_FRAME_H
+#define TOMSKSOFT_INCLUDE_TSVB_FRAME_H
 
 #import <Foundation/Foundation.h>
+
+
+#import <CoreVideo/CVPixelBuffer.h>
+
 
 enum TSVBFrameFormat
 {

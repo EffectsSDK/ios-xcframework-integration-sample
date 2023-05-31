@@ -32,13 +32,17 @@
     _capturer = [[SimpleCameraCapturer alloc] initWithOutputCallback:^(CMSampleBufferRef buffer) {
         CVPixelBufferRef frame = CMSampleBufferGetImageBuffer(buffer);
         PixelBufferWrap* processed = [self->_replacer processPixelBuffer:frame];
-		
         dispatch_async(mainQ, ^{
 			[frameView setPixelBuffer:processed.buffer];
         });
     }];
     
     [_capturer start];
+}
+
+-(UIInterfaceOrientationMask) supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
