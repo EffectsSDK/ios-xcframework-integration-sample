@@ -2,10 +2,7 @@
 #define TOMSKSOFT_INCLUDE_TSVB_FRAME_H
 
 #import <Foundation/Foundation.h>
-
-
 #import <CoreVideo/CVPixelBuffer.h>
-
 
 enum TSVBFrameFormat
 {
@@ -36,6 +33,8 @@ enum TSVBFrameLock
 @property(nonatomic, readonly) enum TSVBFrameFormat format;
 
 -(id<TSVBLockedFrameData>)lock:(enum TSVBFrameLock)lock;
+
+-(nullable CVPixelBufferRef)toCVPixelBuffer;
 
 @end
 

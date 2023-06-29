@@ -5,7 +5,7 @@
 
 @interface SimpleCameraCapturer : NSObject
 
--(id)initWithOutputCallback:(void(^)(CMSampleBufferRef))callback;
+-(nullable instancetype)initWithQueue:(nullable dispatch_queue_t)queue OutputCallback:(void(^ _Nonnull)(CMSampleBufferRef _Nonnull))callback;
 
 -(void)start;
 -(void)stop;

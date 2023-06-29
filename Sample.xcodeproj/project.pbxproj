@@ -18,8 +18,7 @@
 		B426655E27CF7D0F006225F3 /* SimpleCameraCapturerOutputBufferDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B426655B27CF7D0F006225F3 /* SimpleCameraCapturerOutputBufferDelegate.m */; };
 		B426656C27CF7D38006225F3 /* background_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B426656227CF7D38006225F3 /* background_image.jpg */; };
 		B426656D27CF7D38006225F3 /* FrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = B426656527CF7D38006225F3 /* FrameView.m */; };
-		B444A57128815CEF00AC3916 /* BackgroundReplacer.m in Sources */ = {isa = PBXBuildFile; fileRef = B444A57028815CEF00AC3916 /* BackgroundReplacer.m */; };
-		B444A5742881629800AC3916 /* PixelBufferWrap.m in Sources */ = {isa = PBXBuildFile; fileRef = B444A5732881629800AC3916 /* PixelBufferWrap.m */; };
+		B4D3C5F72A4DA4F600B0BCF1 /* Metrics.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D3C5F62A4DA4F600B0BCF1 /* Metrics.m */; };
 		B4F1E12929C9A45C006B8CBA /* TSVB.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B444A56B28814E2F00AC3916 /* TSVB.xcframework */; };
 		B4F1E12A29C9A45C006B8CBA /* TSVB.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B444A56B28814E2F00AC3916 /* TSVB.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -60,10 +59,8 @@
 		B426656527CF7D38006225F3 /* FrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FrameView.m; sourceTree = "<group>"; };
 		B426657127CF7D57006225F3 /* MCVB.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MCVB.xcframework; sourceTree = "<group>"; };
 		B444A56B28814E2F00AC3916 /* TSVB.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = TSVB.xcframework; sourceTree = "<group>"; };
-		B444A56F28815CCC00AC3916 /* BackgroundReplacer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BackgroundReplacer.h; sourceTree = "<group>"; };
-		B444A57028815CEF00AC3916 /* BackgroundReplacer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BackgroundReplacer.m; sourceTree = "<group>"; };
-		B444A5722881628000AC3916 /* PixelBufferWrap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelBufferWrap.h; sourceTree = "<group>"; };
-		B444A5732881629800AC3916 /* PixelBufferWrap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PixelBufferWrap.m; sourceTree = "<group>"; };
+		B4D3C5F52A4DA4F600B0BCF1 /* Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Metrics.h; sourceTree = "<group>"; };
+		B4D3C5F62A4DA4F600B0BCF1 /* Metrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Metrics.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,11 +95,11 @@
 		B41B34C727CF7B96003CDF04 /* Sample */ = {
 			isa = PBXGroup;
 			children = (
+				B4D3C5F52A4DA4F600B0BCF1 /* Metrics.h */,
+				B4D3C5F62A4DA4F600B0BCF1 /* Metrics.m */,
 				B426656227CF7D38006225F3 /* background_image.jpg */,
 				B426656327CF7D38006225F3 /* FrameView.h */,
 				B426656527CF7D38006225F3 /* FrameView.m */,
-				B444A56F28815CCC00AC3916 /* BackgroundReplacer.h */,
-				B444A57028815CEF00AC3916 /* BackgroundReplacer.m */,
 				B426655727CF7D0F006225F3 /* Camera */,
 				B41B34C827CF7B96003CDF04 /* AppDelegate.h */,
 				B41B34C927CF7B96003CDF04 /* AppDelegate.m */,
@@ -115,8 +112,6 @@
 				B41B34D627CF7B97003CDF04 /* LaunchScreen.storyboard */,
 				B41B34D927CF7B97003CDF04 /* Info.plist */,
 				B41B34DA27CF7B97003CDF04 /* main.m */,
-				B444A5722881628000AC3916 /* PixelBufferWrap.h */,
-				B444A5732881629800AC3916 /* PixelBufferWrap.m */,
 			);
 			path = Sample;
 			sourceTree = "<group>";
@@ -224,8 +219,7 @@
 				B41B34D027CF7B96003CDF04 /* ViewController.m in Sources */,
 				B426655D27CF7D0F006225F3 /* SimpleCameraCapturer.m in Sources */,
 				B41B34CA27CF7B96003CDF04 /* AppDelegate.m in Sources */,
-				B444A57128815CEF00AC3916 /* BackgroundReplacer.m in Sources */,
-				B444A5742881629800AC3916 /* PixelBufferWrap.m in Sources */,
+				B4D3C5F72A4DA4F600B0BCF1 /* Metrics.m in Sources */,
 				B41B34DB27CF7B97003CDF04 /* main.m in Sources */,
 				B426656D27CF7D38006225F3 /* FrameView.m in Sources */,
 				B426655E27CF7D0F006225F3 /* SimpleCameraCapturerOutputBufferDelegate.m in Sources */,
@@ -373,7 +367,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = Z4BRRC6X7Q;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -396,7 +390,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tomsksoft.SDK-Demo.iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -410,7 +404,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = Z4BRRC6X7Q;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					GLES_SILENCE_DEPRECATION,
@@ -432,7 +426,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tomsksoft.SDK-Demo.iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

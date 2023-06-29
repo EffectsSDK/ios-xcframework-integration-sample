@@ -8,22 +8,22 @@
     CMMotionManager* _motionManager;
 }
 
--(nullable id)init
+-(nullable instancetype)init
 {
     self = [super init];
     if (nil == self) {
         return nil;
     }
 	
-    self.contentMode = UIViewContentModeScaleAspectFit;
-	
-    _motionManager = [CMMotionManager new];
-    if (_motionManager.accelerometerAvailable) {
-        _motionManager.accelerometerUpdateInterval = 0.1;
-        [_motionManager startAccelerometerUpdates];
-    }
-	
+	[self initialize];
     return self;
+}
+
+-(instancetype)initWithFrame:(CGRect)frame
+{
+	self = [super initWithFrame:frame];	
+	[self initialize];
+	return self;
 }
 
 -(void)setPixelBuffer:(CVPixelBufferRef)pixelBuffer
@@ -47,9 +47,20 @@
     double x = accelerometerData.acceleration.x;
 	
     if (x < 0) {
-        return kCGImagePropertyOrientationRightMirrored;
+        return kCGImagePropertyOrientationRight;
     }
-    return kCGImagePropertyOrientationLeftMirrored;
+    return kCGImagePropertyOrientationLeft;
+}
+
+-(void)initialize
+{
+	self.contentMode = UIViewContentModeScaleAspectFit;
+	
+	_motionManager = [CMMotionManager new];
+	if (_motionManager.accelerometerAvailable) {
+		_motionManager.accelerometerUpdateInterval = 0.1;
+		[_motionManager startAccelerometerUpdates];
+	}
 }
 
 @end

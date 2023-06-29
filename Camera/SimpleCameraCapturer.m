@@ -6,13 +6,6 @@
 
 #import "SimpleCameraCapturer/SimpleCameraCapturerOutputBufferDelegate.h"
 
-static bool isVideoMirrored(AVCaptureVideoOrientation orientation)
-{
-	return
-		(AVCaptureVideoOrientationPortrait == orientation) ||
-		(AVCaptureVideoOrientationPortraitUpsideDown == orientation);
-}
-
 @implementation SimpleCameraCapturer
 {
     dispatch_queue_t _queue;
@@ -28,14 +21,18 @@ static bool isVideoMirrored(AVCaptureVideoOrientation orientation)
     AVCaptureVideoOrientation _currentOrientation;
 }
 
--(id)initWithOutputCallback:(void(^)(CMSampleBufferRef))callback
+-(id)initWithQueue:(dispatch_queue_t)queue OutputCallback:(void(^)(CMSampleBufferRef))callback
 {
     self = [super init];
     if (nil == self) {
         return nil;
     }
 	
-    _queue = dispatch_queue_create("com.tsvb.camera-queue", NULL);
+	_queue = queue;
+	if (NULL == _queue) {
+		_queue = dispatch_queue_create("com.tsvb.simple-camera-capturer", NULL);
+	}
+	
     _session = nil;
     _callback = callback;
 	
@@ -97,7 +94,6 @@ static bool isVideoMirrored(AVCaptureVideoOrientation orientation)
             if (nil != self->_connection) {
                 [self->_session beginConfiguration];
                 self->_connection.videoOrientation = orientation;
-                self->_connection.videoMirrored = isVideoMirrored(orientation);
                 [self->_session commitConfiguration];
             }
         }
@@ -176,7 +172,7 @@ static bool isVideoMirrored(AVCaptureVideoOrientation orientation)
         
         _connection = [output connectionWithMediaType:mediaType];
         _connection.videoOrientation = _currentOrientation;
-        _connection.videoMirrored = isVideoMirrored(_currentOrientation);
+        _connection.videoMirrored = YES;
         
         [session commitConfiguration];
         _session = session;
