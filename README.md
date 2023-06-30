@@ -60,8 +60,6 @@ Use separate **TSVBPipeline** instances per video stream.
 }
 ```
 
-More usage details see in: **Sample/BackgroundReplacer.m**.
-
 ## Class Reference
 
 ### TSVBSDKFactory
@@ -78,8 +76,8 @@ Creates new instance of **TSVBPipeline**.
 
 ### enum TSVBFrameFormat 
 
-- **TSVBFrameFormatRGBA** - RGBA format with 8 bit per channel (32 bits per pixel).
-- **TSVBFrameFormatBGRA** - BGRA format with 8 bit per channel (32 bits per pixel).
+- **TSVBFrameFormatRGBA** - RGBA format with 8 bits per channel (32 bits per pixel).
+- **TSVBFrameFormatBGRA** - BGRA format with 8 bits per channel (32 bits per pixel).
 
 ### enum TSVBFrameLock 
 
@@ -108,7 +106,7 @@ Parameters:
 - **(bool)makeCopy** - if set to true - data will be copied, otherwise TSVBFrame will keep the pointer to data (DON'T release the data while it's processing).
 
 ```objc
--(id<TSVBGLFrame>)imageWithContentOfFile:(NSString*)filePath;
+-(id<TSVBFrame>)imageWithContentOfFile:(NSString*)filePath;
 ```
 
 Loads the image file and returns it as a **TSVBFrame**. If ARC disabled then use it within @autoreleasepool\{ \}
@@ -136,6 +134,11 @@ Returns format of frame.
 Gets access to memory of the frame. 
 Returns TSVBLockedFrameData protocol which provides ability to get pointers to internal data of TSVBFrame (DON’T use the TSVBFrame until TSVBLockedFrameData wasn’t released). 
 If ARC is disabled then use it within @autoreleasepool\{ \}.
+
+```objc
+-(nullable CVPixelBufferRef)toCVPixelBuffer;
+```
+ Converts internal storage to CVPixelBuffer and returns that reference if successful, otherwise returns NULL. If internal storage is CVPixelBuffer already then returns that reference. To keep CVPixelBuffer after TSVBFrame released, call CVPixelBufferRetain. TSVBFrame must not be used after toCVPixelBuffer called.
 
 
 ### TSVBLockedFrameData 
@@ -212,6 +215,28 @@ Parameters:
 Disables background replacement.
 
 ```objc
+-(enum TSVBPipelineError)enableDenoiseBackground;
+```
+Enables video denoising. By default, denoises the background only; to denoise the foreground, set denoiseWithFace to YES.
+
+```objc
+-(void) disableDenoiseBackground;
+```
+Disables denoising.
+
+```objc
+@property(nonatomic) float denoiseLevel;
+```
+Power of denoising: higher number = more visible effect.
+Value from 0 to 1.
+
+```objc
+@property(nonatomic) bool denoiseWithFace;
+```
+If YES, the pipeline denoises the background and foreground of the video. Otherwise, background only.
+Default is NO.
+
+```objc
 -(TSVBPipelineError)enabledBeautification;
 ```
 Enables face beautification. 
@@ -263,6 +288,11 @@ Parameters:
 - **(id\<TSVBFrame\>)frame** - frame for processing.
 - **(TSVBPipelineError\*)error** - NULL or error code.
 
+```objc
+-(id<TSVBFrame>)processCVPixelBuffer:(nonnull CVPixelBufferRef)pixelBuffer
+							error:(nullable enum TSVBPipelineError*)error;
+```
+ Same as **process:error:** but expects CVPixelBufferRef as an argument. Supported formats are kCVPixelFormatType_32BGRA and kCVPixelFormatType_32RGBA.
 
 ### TSVBReplacementController 
 
@@ -284,4 +314,14 @@ Determines pipeline that performs image processing.
 - **TSVBBackendCPU** - CPU-based pipeline.
 - **TSVBBackendGPU** - GPU-based pipeline.
 
+```objc
+@property(nonatomic)enum TSVBSegmentationPreset segmentationPreset
+```
+Set the segmentation mode. Segmentation mode allow to choose combination of quality and speed of segmentation. Quality mode is enabled by default.
 
+### enum TSVBSegmentationPreset
+
+- **TSVBSegmentationPresetQuality** - Quality is preferred.
+- **TSVBSegmentationPresetBalanced** - Balanced quality and speed.
+- **TSVBSegmentationPresetSpeed** - Speed is preferred.
+- **TSVBSegmentationPresetLightning** - Speed is prioritized.
