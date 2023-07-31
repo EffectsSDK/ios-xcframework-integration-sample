@@ -102,6 +102,8 @@
 	_updateLabelTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer* timer){
 		[self updateTimeAndFPSLabels];
 	}];
+    
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
 
 -(UIButton*)newButtonWithTitle:(NSString*)title action:(SEL)action
