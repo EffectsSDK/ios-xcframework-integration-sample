@@ -7,56 +7,68 @@
 #import <TSVB/TSVBFrame.h>
 #import <TSVB/TSVBPipelineConfiguration.h>
 
-enum TSVBPipelineError
+typedef NS_ENUM(NSInteger, TSVBPipelineError)
 {
 	TSVBPipelineErrorOk = 0,
-	TSVBPipelineErrorInvalidArguemnt = 1,
+	TSVBPipelineErrorInvalidArgument = 1,
 	TSVBPipelineErrorNoFeaturesEnabled = 2,
 	TSVBPipelineErrorEngineInitializationError = 3,
 	TSVBPipelineErrorResourceAllocationError = 4
-};
+} NS_SWIFT_NAME(PipelineError);
 
+NS_SWIFT_NAME(ReplacementController)
 @protocol TSVBReplacementController<NSObject>
 
 @property(nonatomic, retain, nullable) id<TSVBFrame> background;
 
 @end
 
+NS_SWIFT_NAME(Pipeline)
 @protocol TSVBPipeline<NSObject>
 
--(enum TSVBPipelineError)setConfiguration:(id<TSVBPipelineConfiguration>_Nonnull)configuration;
+-(TSVBPipelineError)setConfiguration:(id<TSVBPipelineConfiguration>_Nonnull)configuration;
 -(nullable id<TSVBPipelineConfiguration>)copyConfiguration;
 -(nullable id<TSVBPipelineConfiguration>)copyDefaultConfiguration;
 
--(enum TSVBPipelineError)enableBlurBackgroundWithPower:(float)power;
+-(TSVBPipelineError)enableBlurBackgroundWithPower:(float)power NS_SWIFT_NAME(enableBlurBackground(power:));
 -(void) disableBlurBackground;
 
--(enum TSVBPipelineError)enableReplaceBackground:
-    (id<TSVBReplacementController>_Nullable*_Nullable)controller;
+-(TSVBPipelineError)enableReplaceBackground:
+    (id<TSVBReplacementController> __strong _Nullable* _Nullable)controller;
 -(void) disableReplaceBackground;
 
--(enum TSVBPipelineError)enableDenoiseBackground;
+-(TSVBPipelineError)enableDenoiseBackground;
 -(void) disableDenoiseBackground;
-@property(nonatomic) float denoiseLevel;
+@property(nonatomic) float denoisePower;
 @property(nonatomic) bool denoiseWithFace;
 
--(enum TSVBPipelineError)enableBeautification;
+-(TSVBPipelineError)enableBeautification;
 -(void) disableBeautification;
 @property(nonatomic) float beautificationLevel;
 
--(enum TSVBPipelineError)enableColorCorrection;
+-(TSVBPipelineError)enableColorCorrection;
+-(TSVBPipelineError)enableColorCorrectionWithReferance:(nonnull id<TSVBFrame>)reference;
+-(TSVBPipelineError)enableColorCorrectionWithLutFile:(nonnull NSString*)filePath;
 -(void) disableColorCorrection;
 @property(nonatomic) float colorCorrectionPower;
 
--(enum TSVBPipelineError)enableSmartZoom;
+-(TSVBPipelineError)enableSmartZoom;
 -(void) disableSmartZoom;
 @property(nonatomic) float smartZoomLevel;
 
+-(TSVBPipelineError)enableLowLightAdjustment;
+-(void)disableLowLightAdjustment;
+@property(nonatomic) float lowLightAdjustmentPower;
+
+-(TSVBPipelineError)enableSharpening;
+-(void)disableSharpening;
+@property(nonatomic) float sharpeningPower;
+
 -(nullable id<TSVBFrame>) process:(nonnull id<TSVBFrame>)frame
-							error:(nullable enum TSVBPipelineError*)error;
+							error:(nullable TSVBPipelineError*)error;
 
 -(nullable id<TSVBFrame>)processCVPixelBuffer:(nonnull CVPixelBufferRef)pixelBuffer
-							error:(nullable enum TSVBPipelineError*)error;
+							error:(nullable TSVBPipelineError*)error NS_SWIFT_NAME(process(pixelBuffer:error:));
 
 @end
 

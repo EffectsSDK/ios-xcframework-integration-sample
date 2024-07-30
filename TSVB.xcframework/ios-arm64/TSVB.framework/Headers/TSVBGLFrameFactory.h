@@ -6,7 +6,7 @@
 @protocol TSVBGLFrameFactory<NSObject>
 
 - (nullable id<TSVBGLFrame>)newFrameWithGLTexture:(unsigned int)name
-										   format:(enum TSVBFrameFormat)format
+										   format:(TSVBFrameFormat)format
 											width:(unsigned int)width
 										   height:(unsigned int)height
 										isFlipped:(bool)flipped;

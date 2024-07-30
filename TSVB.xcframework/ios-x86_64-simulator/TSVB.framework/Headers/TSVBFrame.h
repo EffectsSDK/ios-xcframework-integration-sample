@@ -4,37 +4,39 @@
 #import <Foundation/Foundation.h>
 #import <CoreVideo/CVPixelBuffer.h>
 
-enum TSVBFrameFormat
+typedef NS_ENUM(NSInteger, TSVBFrameFormat)
 {
 	TSVBFrameFormatBgra32 = 1,
 	TSVBFrameFormatRgba32 = 2,
 	TSVBFrameFormatNv12 = 3
-};
+} NS_SWIFT_NAME(FrameFormat);
 
-enum TSVBFrameLock
+typedef NS_ENUM(NSInteger, TSVBFrameLock)
 {
 	TSVBFrameLockRead = 1,
 	TSVBFrameLockWrite = 2,
 	TSVBFrameLockReadWrite = (TSVBFrameLockRead | TSVBFrameLockWrite)
-};
+} NS_SWIFT_NAME(Lock);
 
+NS_SWIFT_NAME(LockedFrameData)
 @protocol TSVBLockedFrameData<NSObject>
 
 -(unsigned int)bytesPerLineOfPlanar:(int)index;
--(void*)dataPointerOfPlanar:(int)index NS_RETURNS_INNER_POINTER;
+-(nullable void*)dataPointerOfPlanar:(int)index NS_RETURNS_INNER_POINTER;
 
 @end
 
+NS_SWIFT_NAME(Frame)
 @protocol TSVBFrame<NSObject>
 
 @property(nonatomic, readonly) unsigned int width;
 @property(nonatomic, readonly) unsigned int height;
 
-@property(nonatomic, readonly) enum TSVBFrameFormat format;
+@property(nonatomic, readonly) TSVBFrameFormat format;
 
--(id<TSVBLockedFrameData>)lock:(enum TSVBFrameLock)lock;
+-(nullable id<TSVBLockedFrameData>)lock:(TSVBFrameLock)lock;
 
--(nullable CVPixelBufferRef)toCVPixelBuffer;
+-(nullable CVPixelBufferRef)toCVPixelBuffer NS_RETURNS_INNER_POINTER;
 
 @end
 

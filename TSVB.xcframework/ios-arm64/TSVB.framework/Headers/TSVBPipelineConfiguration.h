@@ -3,25 +3,26 @@
 
 #import <Foundation/Foundation.h>
 
-enum TSVBBackend
+typedef NS_ENUM(NSInteger, TSVBBackend)
 {
 	TSVBBackendCPU = 1,
 	TSVBBackendGPU = 2
-};
+} NS_SWIFT_NAME(Backend);
 
-enum TSVBSegmentationPreset
+typedef NS_ENUM(NSInteger, TSVBSegmentationPreset)
 {
 	TSVBSegmentationPresetQuality = 0,
 	TSVBSegmentationPresetBalanced = 1,
 	TSVBSegmentationPresetSpeed = 2,
 	TSVBSegmentationPresetLightning = 3,
-};
+} NS_SWIFT_NAME(SegmentationPreset);
 
+NS_SWIFT_NAME(PipelineConfiguration)
 @protocol TSVBPipelineConfiguration<NSObject>
 
-@property(nonatomic) enum TSVBBackend backend;
+@property(nonatomic) TSVBBackend backend;
 
-@property(nonatomic) enum TSVBSegmentationPreset segmentationPreset;
+@property(nonatomic) TSVBSegmentationPreset segmentationPreset;
 
 @end
 
