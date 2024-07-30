@@ -225,7 +225,7 @@ Enables video denoising. By default, denoises the background only; to denoise th
 Disables denoising.
 
 ```objc
-@property(nonatomic) float denoiseLevel;
+@property(nonatomic) float denoisePower;
 ```
 Power of denoising: higher number = more visible effect.
 Value from 0 to 1.

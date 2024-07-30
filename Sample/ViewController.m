@@ -259,7 +259,7 @@
 					[self->_pipeline enableDenoiseBackground];
 				self->_denoiseEnabled = TSVBPipelineErrorOk == error;
 				if (self->_denoiseEnabled) {
-					self->_pipeline.denoiseLevel = 1;
+					self->_pipeline.denoisePower = 1;
 				}
 			}
 			
