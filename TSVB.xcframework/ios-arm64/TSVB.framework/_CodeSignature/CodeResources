@@ -8,6 +8,10 @@
 		<data>
 		qq7Wom3Qrv74ll/yUnOgkM6iFAg=
 		</data>
+		<key>Headers/TSVBAuthorization.h</key>
+		<data>
+		ET8mukrQSsI10ByHHgVYJPvMfc0=
+		</data>
 		<key>Headers/TSVBDeviceContext.h</key>
 		<data>
 		381IjMo3iTVPHkNowYK3TUE4P18=
@@ -46,15 +50,19 @@
 		</data>
 		<key>Headers/TSVBSDKFactory.h</key>
 		<data>
-		B9/91QvHfX68eGvPB+3QrbnwQZc=
+		1+76uLSTNUrYM37nQhzawKV7G7Q=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		4KKol/pZox9TrG+79fp+0nL0DuQ=
+		g9qSu3jt1FEch1+6q30xQlteeK4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
 		QDrrtOjjmXw3zolMvbF2zosOiCA=
+		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		6PyG/Sn5jh81qqGDYJ701GSxHBw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -64,6 +72,13 @@
 			<key>hash2</key>
 			<data>
 			6Sb2HvcMnXYL0y+nZvUkYoKvDESt1t2hgVWQtg8wdkU=
+			</data>
+		</dict>
+		<key>Headers/TSVBAuthorization.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xCu0ruBYubJBMrUaeAYk74Odnr5J0Px3AGxIDLaVnVw=
 			</data>
 		</dict>
 		<key>Headers/TSVBDeviceContext.h</key>
@@ -133,7 +148,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+LdNlYOCP0zGFJR1u9RmHJCy/XCc7tN34o+Wt+AlsPY=
+			D+SwHoBGa0vHKqv0Dn7WyLpS81zcfOOWPp1y+uMdc4g=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -141,6 +156,13 @@
 			<key>hash2</key>
 			<data>
 			CFneUHDBISI4U8cZrqe6C7UUS0VfNphHEfICAYk/vF8=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			3I1+H5p9p/M4HzB0a1kgbuYs4iW2n+O8u2YjT4RZvjU=
 			</data>
 		</dict>
 	</dict>

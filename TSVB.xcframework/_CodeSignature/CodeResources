@@ -8,6 +8,10 @@
 		<data>
 		qq7Wom3Qrv74ll/yUnOgkM6iFAg=
 		</data>
+		<key>ios-arm64/TSVB.framework/Headers/TSVBAuthorization.h</key>
+		<data>
+		ET8mukrQSsI10ByHHgVYJPvMfc0=
+		</data>
 		<key>ios-arm64/TSVB.framework/Headers/TSVBDeviceContext.h</key>
 		<data>
 		381IjMo3iTVPHkNowYK3TUE4P18=
@@ -46,27 +50,35 @@
 		</data>
 		<key>ios-arm64/TSVB.framework/Headers/TSVBSDKFactory.h</key>
 		<data>
-		B9/91QvHfX68eGvPB+3QrbnwQZc=
+		1+76uLSTNUrYM37nQhzawKV7G7Q=
 		</data>
 		<key>ios-arm64/TSVB.framework/Info.plist</key>
 		<data>
-		4KKol/pZox9TrG+79fp+0nL0DuQ=
+		g9qSu3jt1FEch1+6q30xQlteeK4=
 		</data>
 		<key>ios-arm64/TSVB.framework/Modules/module.modulemap</key>
 		<data>
 		QDrrtOjjmXw3zolMvbF2zosOiCA=
 		</data>
+		<key>ios-arm64/TSVB.framework/PrivacyInfo.xcprivacy</key>
+		<data>
+		6PyG/Sn5jh81qqGDYJ701GSxHBw=
+		</data>
 		<key>ios-arm64/TSVB.framework/TSVB</key>
 		<data>
-		E0qmSGb70PmcNGc88JEZyU5GTQE=
+		VfRidOK8B8n9RMUJzG/p3XN/ohs=
 		</data>
 		<key>ios-arm64/TSVB.framework/_CodeSignature/CodeResources</key>
 		<data>
-		sn7VNSbPFhg/d0BS0Q8t/qGWzEs=
+		r3cvxGjnNnjPTef2HeIJbdSfXeI=
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVB.h</key>
 		<data>
 		qq7Wom3Qrv74ll/yUnOgkM6iFAg=
+		</data>
+		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVBAuthorization.h</key>
+		<data>
+		ET8mukrQSsI10ByHHgVYJPvMfc0=
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVBDeviceContext.h</key>
 		<data>
@@ -106,23 +118,27 @@
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVBSDKFactory.h</key>
 		<data>
-		B9/91QvHfX68eGvPB+3QrbnwQZc=
+		1+76uLSTNUrYM37nQhzawKV7G7Q=
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/Info.plist</key>
 		<data>
-		biAHX33XP1+0rxLOp+QRdRNlE7M=
+		FLB69dnonxJGY3gZRgy2oqJ2Mb4=
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/Modules/module.modulemap</key>
 		<data>
 		QDrrtOjjmXw3zolMvbF2zosOiCA=
 		</data>
+		<key>ios-x86_64-simulator/TSVB.framework/PrivacyInfo.xcprivacy</key>
+		<data>
+		6PyG/Sn5jh81qqGDYJ701GSxHBw=
+		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/TSVB</key>
 		<data>
-		GSSPnWQxZp0xd1s3Ywhcaj+1Wbs=
+		FqTmHKvxl1HQdO7XSdKfuiGZnzM=
 		</data>
 		<key>ios-x86_64-simulator/TSVB.framework/_CodeSignature/CodeResources</key>
 		<data>
-		TlFJPaV9AlyvZgyWLUKsS58+64o=
+		zMF2lzICmgGfIxQ7E3WhvR73yMw=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -138,6 +154,17 @@
 			6Sb2HvcMnXYL0y+nZvUkYoKvDESt1t2hgVWQtg8wdkU=
 			</data>
 		</dict>
+		<key>ios-arm64/TSVB.framework/Headers/TSVBAuthorization.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ET8mukrQSsI10ByHHgVYJPvMfc0=
+			</data>
+			<key>hash2</key>
+			<data>
+			xCu0ruBYubJBMrUaeAYk74Odnr5J0Px3AGxIDLaVnVw=
+			</data>
+		</dict>
 		<key>ios-arm64/TSVB.framework/Headers/TSVBDeviceContext.h</key>
 		<dict>
 			<key>hash</key>
@@ -241,22 +268,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			B9/91QvHfX68eGvPB+3QrbnwQZc=
+			1+76uLSTNUrYM37nQhzawKV7G7Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			+LdNlYOCP0zGFJR1u9RmHJCy/XCc7tN34o+Wt+AlsPY=
+			D+SwHoBGa0vHKqv0Dn7WyLpS81zcfOOWPp1y+uMdc4g=
 			</data>
 		</dict>
 		<key>ios-arm64/TSVB.framework/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			4KKol/pZox9TrG+79fp+0nL0DuQ=
+			g9qSu3jt1FEch1+6q30xQlteeK4=
 			</data>
 			<key>hash2</key>
 			<data>
-			Z1nKcZL6UvyGeaCu8lNJRZDjPM6r7e2r0YngPPCadew=
+			RuI65vCB7SkT5KjAa6M4NGU7JQWyrC03aWOlmVpTsS8=
 			</data>
 		</dict>
 		<key>ios-arm64/TSVB.framework/Modules/module.modulemap</key>
@@ -270,26 +297,37 @@
 			CFneUHDBISI4U8cZrqe6C7UUS0VfNphHEfICAYk/vF8=
 			</data>
 		</dict>
+		<key>ios-arm64/TSVB.framework/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			6PyG/Sn5jh81qqGDYJ701GSxHBw=
+			</data>
+			<key>hash2</key>
+			<data>
+			3I1+H5p9p/M4HzB0a1kgbuYs4iW2n+O8u2YjT4RZvjU=
+			</data>
+		</dict>
 		<key>ios-arm64/TSVB.framework/TSVB</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			E0qmSGb70PmcNGc88JEZyU5GTQE=
+			VfRidOK8B8n9RMUJzG/p3XN/ohs=
 			</data>
 			<key>hash2</key>
 			<data>
-			E5MOHQB6wS0LLwtKMSk49Zd08Xl22+ZLFBtuEpi8PdY=
+			eHjB9j6Q74z1lsVkxeG+rAT+Q01q2FZZdbCNYxFq2tw=
 			</data>
 		</dict>
 		<key>ios-arm64/TSVB.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			sn7VNSbPFhg/d0BS0Q8t/qGWzEs=
+			r3cvxGjnNnjPTef2HeIJbdSfXeI=
 			</data>
 			<key>hash2</key>
 			<data>
-			oCW5RIIF72VcWLTeSdX3/GKQRJUiw8b1BbWwRSRHvj0=
+			+YhiON0Eg/CAkB292PDICKcZmLV5/SZi8s34sgKe4gE=
 			</data>
 		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVB.h</key>
@@ -301,6 +339,17 @@
 			<key>hash2</key>
 			<data>
 			6Sb2HvcMnXYL0y+nZvUkYoKvDESt1t2hgVWQtg8wdkU=
+			</data>
+		</dict>
+		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVBAuthorization.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ET8mukrQSsI10ByHHgVYJPvMfc0=
+			</data>
+			<key>hash2</key>
+			<data>
+			xCu0ruBYubJBMrUaeAYk74Odnr5J0Px3AGxIDLaVnVw=
 			</data>
 		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/Headers/TSVBDeviceContext.h</key>
@@ -406,22 +455,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			B9/91QvHfX68eGvPB+3QrbnwQZc=
+			1+76uLSTNUrYM37nQhzawKV7G7Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			+LdNlYOCP0zGFJR1u9RmHJCy/XCc7tN34o+Wt+AlsPY=
+			D+SwHoBGa0vHKqv0Dn7WyLpS81zcfOOWPp1y+uMdc4g=
 			</data>
 		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			biAHX33XP1+0rxLOp+QRdRNlE7M=
+			FLB69dnonxJGY3gZRgy2oqJ2Mb4=
 			</data>
 			<key>hash2</key>
 			<data>
-			6RXhQbulNKtH9n1I0RuGaX63/DkVy0gP73qRISERaeQ=
+			NOfCycDN/6l/eGj8kfEcZK0sxprv2BHF5oi6YVBlwik=
 			</data>
 		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/Modules/module.modulemap</key>
@@ -435,26 +484,37 @@
 			CFneUHDBISI4U8cZrqe6C7UUS0VfNphHEfICAYk/vF8=
 			</data>
 		</dict>
+		<key>ios-x86_64-simulator/TSVB.framework/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			6PyG/Sn5jh81qqGDYJ701GSxHBw=
+			</data>
+			<key>hash2</key>
+			<data>
+			3I1+H5p9p/M4HzB0a1kgbuYs4iW2n+O8u2YjT4RZvjU=
+			</data>
+		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/TSVB</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			GSSPnWQxZp0xd1s3Ywhcaj+1Wbs=
+			FqTmHKvxl1HQdO7XSdKfuiGZnzM=
 			</data>
 			<key>hash2</key>
 			<data>
-			D9J4uZd4h64mo1vbHKQTfPj60nCxKu5lTF+tff1NqiM=
+			ezMu6iSnd29VVN3dXPHjflLrlzgAPVvmE+NlKzA8H6c=
 			</data>
 		</dict>
 		<key>ios-x86_64-simulator/TSVB.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TlFJPaV9AlyvZgyWLUKsS58+64o=
+			zMF2lzICmgGfIxQ7E3WhvR73yMw=
 			</data>
 			<key>hash2</key>
 			<data>
-			abrXVgMwnDA4HY9Wxw0TCgxgD16KPE5pzwZ67mL7oqA=
+			uEM41XVg4fDk+oygAkTkpA84PBckLHYHv3wnhy2E4VU=
 			</data>
 		</dict>
 	</dict>

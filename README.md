@@ -1,8 +1,8 @@
-# Video Effects SDK - iOS trial SDK frameworks and Samples
+# Video Effects SDK - iOS SDK frameworks and Samples
 
 Add real-time AI video enhancement that makes video meeting experience more effective and comfortable to your application in a few hours.
 
-This repository contains the trial version of Objective-C iOS xcframeworks versions of Effects SDK that you can integrate into your project/product to see how it will work in real conditions.
+This repository contains the version of Objective-C iOS xcframeworks versions of Effects SDK that you can integrate into your project/product.
 
 Also, there is the Sample Xcode project with Effects SDK integration, so you can just build and run it to see SDK in action.
 
@@ -11,12 +11,13 @@ Also, there is the Sample Xcode project with Effects SDK integration, so you can
 
 To receive a Effects SDK license please fill in the contact form on [effectssdk.com](https://effectssdk.com/contacts) website.
 
-## Techical Details
+## Technical Details
 
 - SDK available for iOS 13 and newer.
 - Frames preprocessing/postprocessing could be run on CPU or GPU.
 - ML inference could be run only on CPU.
-
+- 4 Virtual Background presets (Quality, Balanced, Speed and Lightning). See [pipeline configuration](#tsvbpipelineconfiguration).
+  
 ## Features
 
 - Virtual backgrounds (put image as a background) - **implemented**
@@ -28,21 +29,23 @@ To receive a Effects SDK license please fill in the contact form on [effectssdk.
 
 ## Usage  details
 
-The entrypoint of the SDK is the instance of TSVBSDKFactory. 
-Using an TSVBSDKFactory instance you will be able to prepare frames for processing and configure the pipeline of processing (enable transparency, blur, replace background etc).
+The entrypoint of the SDK is the instance of **TSVBSDKFactory**. 
+Using an **TSVBSDKFactory** instance you will be able to prepare frames for processing and configure the pipeline of processing (enable transparency, blur, replace background etc).
 
 ### Usage
 
 Preparation:
 - Create an instance of **TSVBSDKFactory**.
+- Authorize the instance of **TSVBSDKFactory** by using [authWithCustomerID:completionHandler:](#sdkfactory-auth) method.
 - Create an instance of **TSVBFrameFactory** by using **newFrameFactory** method of **TSVBSDKFactory**.
 - Create an instance of **TSVBPipeline** by using **newPipeline** method of **TSVBSDKFactory**.
-- Enable background blur using **enableBlurBackgroundWithPower:** mthod or background replacement using **enableReplaceBackground:** method of **TSVBPipeline**.
+- Enable background blur using **enableBlurBackgroundWithPower:** method or background replacement using **enableReplaceBackground:** method of **TSVBPipeline**.
 - When the background replacement is enabled you can pass image which will be used as a background: **TSVBReplacementController.background**
 
 Frame processing:
 - Put your frame to **TSVBFrame** using **newFrameWithFormat:data:bytesPerLine:width:height:makeCopy:** method of **TSVBFrameFactory**.
 - Process it through **process:error:** method of **TSVBPipeline**.
+- - If your frame is [CVPixelBuffer](https://developer.apple.com/documentation/corevideo/cvpixelbuffer-q2e), you just can use [processCVPixelBuffer:error:](#pipeline-process-pixelbuffer) method of **TSVBPipeline**.
 
 Use separate **TSVBPipeline** instances per video stream.
 
@@ -52,17 +55,41 @@ Use separate **TSVBPipeline** instances per video stream.
     self = [super init];
 	
     TSVBSDKFactory* sdkFactory = [TSVBSDKFactory new];
-    _frameFactory = [sdkFactory newFrameFactory];
-    _pipeline = [sdkFactory newPipeline];
-    [_pipeline enableReplaceBackground:&_backgroundController];
+    [sdkFactory authWithCustomerID:@"CUSTOMER_ID"
+				completionHandler:^(id<TSVBAuthResult>_Nullable result, NSError*_Nullable error) {		
+		if (nil != error) {
+			// Handle authorization error.
+			return;
+		}
+			
+		if (TSVBAuthStatusActive == result.status) {
+			_frameFactory = [sdkFactory newFrameFactory];
+			_pipeline = [sdkFactory newPipeline];
+			[_pipeline enableReplaceBackground:&_backgroundController];
+		}
+	}];
     
     return self;
 }
 ```
 
+More usage details see in: **Sample/VideoFilter.m**.
+
 ## Class Reference
 
 ### TSVBSDKFactory
+
+<a id="sdkfactory-auth"></a>
+```objc
+typedef void (^TSVBAuthCompletionHandler) (id<TSVBAuthResult>_Nullable result, NSError*_Nullable error)
+-(void)authWithCustomerID:(nonnull NSString*)customerID completionHandler:(TSVBAuthCompletionHandler)completionHandler
+```
+Performs authorization of the instance. **SDKFactory** can not be used until it's authorized.
+Method performs https request to obtain license for customerID. Required internet connection.
+
+Parameters: 
+- **(NSString*)customerID** - Your unique customer id. See [Obtaining Effects SDK License](#obtaining-effects-sdk-license)
+- **(TSVBAuthCompletionHandler)completionHandler** - Handler to be called on authorization finished. **TSVBAuthCompletionHandler** accepts [TSVBAuthResult](#tsvbauthresult) or **NSError**\* if an error occurred during authorization.
 
 ```objc
 -(nullable id<TSVBFrameFactory>)newFrameFactory; 
@@ -74,10 +101,17 @@ Creates new instance of **TSVBFrameFactory**.
 ```
 Creates new instance of **TSVBPipeline**.
 
+### TSVBAuthResult
+
+```objc
+@property(nonatomic, readonly) TSVBAuthStatus status;
+```
+Holds result of authorization. See [TSVBAuthStatus](#enum-tsvbauthstatus).
+
 ### enum TSVBFrameFormat 
 
-- **TSVBFrameFormatRGBA** - RGBA format with 8 bits per channel (32 bits per pixel).
-- **TSVBFrameFormatBGRA** - BGRA format with 8 bits per channel (32 bits per pixel).
+- **TSVBFrameFormatRGBA** - RGBA format with 8 bit per channel (32 bits per pixel).
+- **TSVBFrameFormatBGRA** - BGRA format with 8 bit per channel (32 bits per pixel).
 
 ### enum TSVBFrameLock 
 
@@ -145,7 +179,7 @@ If ARC is disabled then use it within @autoreleasepool\{ \}.
 
 Keeps access to the data inside TSVBFrame and returns pointers to that data.
 If it was obtained with **lock:TSVBFrameLockWrite** or  **lock:TSVBFrameLockReadWrite** , then the changes will be applied after TSVBLockedFrameData will be released. 
-If it was obtained with **lock:TSVBFrameLockRead** then data nust not be changed.
+If it was obtained with **lock:TSVBFrameLockRead** then data must not be changed.
 
 ```objc
 -(void*)dataPointerOfPlanar:(int)index;
@@ -183,7 +217,7 @@ Configures pipeline, determines what to use for image processing (see **TSVBPipe
 ```
 Returns a copy of current configuration of pipeline. Can be used to get an instance of TSVBPipelineConfiguration.
 
-```obcj
+```objc
 -(id<TSVBPipelineConfiguration>)copyDefaultConfiguration;
 ```
 Returns a copy of the default configuration. Can be used to get an instance of TSVBPipelineConfiguration.
@@ -215,28 +249,6 @@ Parameters:
 Disables background replacement.
 
 ```objc
--(enum TSVBPipelineError)enableDenoiseBackground;
-```
-Enables video denoising. By default, denoises the background only; to denoise the foreground, set denoiseWithFace to YES.
-
-```objc
--(void) disableDenoiseBackground;
-```
-Disables denoising.
-
-```objc
-@property(nonatomic) float denoisePower;
-```
-Power of denoising: higher number = more visible effect.
-Value from 0 to 1.
-
-```objc
-@property(nonatomic) bool denoiseWithFace;
-```
-If YES, the pipeline denoises the background and foreground of the video. Otherwise, background only.
-Default is NO.
-
-```objc
 -(TSVBPipelineError)enabledBeautification;
 ```
 Enables face beautification. 
@@ -254,8 +266,27 @@ Could be from 0 to 1. Higher number \-\> more visible effect of beautification.
 ```objc
 -(TSVBPipelineError)enabledColorCorrection;
 ```
-Enables color correction.
+Enables color correction. Improves colors with the help of ML.
+Disables another enabled color correction effect.
 Note: Preparation starts asynchronously after a frame process, the effect may be delayed.
+
+```objc
+-(enum TSVBPipelineError)enabledColorCorrectionWithReference:(id<TSVBFrame>)reference;
+```
+Enables color grading. Generates a color palette from reference and apply it to the video.
+Parameters:
+- **(id\<TSVBFrame\>\*)reference** - The reference to generate a color palette.
+If enabled, generates a new color palette with referenceFrame.
+Disables another enabled color correction effect.
+
+```objc
+-(enum TSVBPipelineError)enableColorCorrectionWithLutFile:(NSString*)filePath;
+```
+Enables color filtering with a Lookup Table (Lut).
+Parameters:
+- **(NSString\*)filePath** - path to .cube file. Supports only 3D Lut with maximum size 256 (256x256x256).
+If enabled, switches Lut.
+Disables another enabled color correction effect.
 
 ```objc
 -(void)disableColorCorrection;
@@ -281,6 +312,21 @@ Parameters
 - **float smartZoomLevel** - could be from 0 to 1. Defines how much area should be filled by a face. Higher number \-\> more area. 
 
 ```objc
+-(TSVBPipelineError)enableSharpening;
+```
+Enables sharpening effect. Sharpening makes the video look better by enhancing its clarity. It reduces blurriness in the video.  
+
+```objc
+-(void)disableSharpening;
+```
+Disables sharpening effect.   
+
+```objc
+@property(nonatomic) float sharpeningPower;
+```
+Current power of the sharpening effect. Power could be from 0 to 1. Higher number -> sharper result.
+
+```objc
 -(id<TSVBFrame>)process:(id<TSVBFrame>)frame error:(TSVBPipelineError*)error;
 ```
 Returns processed frame the same format with input (with all effects applied). In case of error, returns NULL.
@@ -292,7 +338,7 @@ Parameters:
 -(id<TSVBFrame>)processCVPixelBuffer:(nonnull CVPixelBufferRef)pixelBuffer
 							error:(nullable enum TSVBPipelineError*)error;
 ```
- Same as **process:error:** but expects CVPixelBufferRef as an argument. Supported formats are kCVPixelFormatType_32BGRA and kCVPixelFormatType_32RGBA.
+ Same as **process:error:** but expects [CVPixelBuffer](https://developer.apple.com/documentation/corevideo/cvpixelbuffer-q2e) as an argument. Supported formats are kCVPixelFormatType_32BGRA and kCVPixelFormatType_32RGBA.
 
 ### TSVBReplacementController 
 
@@ -321,7 +367,13 @@ Set the segmentation mode. Segmentation mode allow to choose combination of qual
 
 ### enum TSVBSegmentationPreset
 
-- **TSVBSegmentationPresetQuality** - Quality is preferred.
-- **TSVBSegmentationPresetBalanced** - Balanced quality and speed.
-- **TSVBSegmentationPresetSpeed** - Speed is preferred.
-- **TSVBSegmentationPresetLightning** - Speed is prioritized.
+- **TSVBSegmentationPresetQuality**
+- **TSVBSegmentationPresetBalanced**
+- **TSVBSegmentationPresetSpeed**
+- **TSVBSegmentationPresetLightning**
+
+### enum TSVBAuthStatus
+
+- **TSVBAuthStatusActive** - Authorization is succeeded and the license is active. SDK can be used to enhance your video.
+- **TSVBAuthStatusInactive** - Authorization is failed because the license is deactivated or no such license.
+- **TSVBAuthStatusExpired** - Authorization is failed because the license is expired. Contact us to update it.

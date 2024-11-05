@@ -13,6 +13,7 @@
 @implementation ViewController
 {
     SimpleCameraCapturer* _capturer;
+	TSVBSDKFactory* _sdkFactory;
 	id<TSVBFrameFactory> _frameFactory;
 	id<TSVBPipeline> _pipeline;
 	Metrics* _metrics;
@@ -25,26 +26,29 @@
 	bool _beautificationEnabled;
 	bool _colorCorrectionEnabled;
 	bool _smartZoomEnabled;
+	bool _lowLightEnabled;
+	bool _sharpeningEnabled;
 	
 	FrameView* _frameView;
 	UILabel* _fpsLabel;
 	UILabel* _timeLabel;
 	NSTimer* _updateLabelTimer;
 	
+	UIView* _buttonsPanel;
 	UIButton* _blurButton;
 	UIButton* _replaceButton;
 	UIButton* _denoiseButton;
 	UIButton* _beautificationButton;
 	UIButton* _colorCorrectionButton;
 	UIButton* _smartZoomButton;
+	UIButton* _lowLightButton;
+	UIButton* _sharpeningButton;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-	TSVBSDKFactory* sdkFactory = [TSVBSDKFactory new];
-	_frameFactory = [sdkFactory newFrameFactory];
-	_pipeline = [sdkFactory newPipeline];
+	_sdkFactory = [TSVBSDKFactory new];
 	_metrics = [Metrics new];
 	
 	_frameView = [[FrameView alloc] initWithFrame:CGRectZero];
@@ -53,7 +57,9 @@
 	_frameView.autoresizingMask =
 		UIViewAutoresizingFlexibleWidth |
 		UIViewAutoresizingFlexibleHeight;
-	[rootView addSubview:[self newViewWithButtons]];
+	_buttonsPanel = [self newViewWithButtons];
+	[rootView addSubview:_buttonsPanel];
+	[_buttonsPanel setHidden:YES];
 
 	_timeLabel = [self newInfoLabel];
 	[rootView addSubview:_timeLabel];
@@ -62,16 +68,84 @@
 	[rootView addSubview:_fpsLabel];
 	
  	[self setView:rootView];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+	
+	[_sdkFactory authWithCustomerID:@"CUSTOMER_ID"
+				completionHandler:^(id<TSVBAuthResult>_Nullable result, NSError*_Nullable error) {
+		
+		dispatch_queue_t mainQ = dispatch_get_main_queue();
+		dispatch_async(mainQ, ^{
+			if (nil != error) {
+				[self handleAuthorizationFailureWithError:error];
+				return;
+			}
+			
+			if (TSVBAuthStatusActive == result.status) {
+				[self handleAuthorizationSuccess];
+			}
+			else {
+				[self handleAuthorizationFailureWithResult:result];
+			}
+		});
+	}];
+}
+
+-(void)handleAuthorizationSuccess
+{
+	[self->_buttonsPanel setHidden:NO];
+	[self startVideoProcessing];
+}
+
+-(void)handleAuthorizationFailureWithError:(NSError*_Nullable)error
+{
+	[self presentAuthorizationFailureMessage:[error localizedDescription]];
+}
+
+-(void)handleAuthorizationFailureWithResult:(id<TSVBAuthResult>)result
+{
+	NSString* errorMsg = nil;
+	switch (result.status) {
+		case TSVBAuthStatusExpired:
+			errorMsg = @"License expired";
+			break;
+			
+		case TSVBAuthStatusInactive:
+			errorMsg = @"License is inactive";
+			break;
+			
+		default:
+			break;
+	}
+	
+	[self presentAuthorizationFailureMessage:errorMsg];
+}
+
+-(void)presentAuthorizationFailureMessage:(NSString*_Nullable)msg
+{
+	UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Authorization failed"
+		message:msg
+		preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+	   handler:^(UIAlertAction * action) {}];
+	 
+	[alert addAction:defaultAction];
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+-(void)startVideoProcessing
+{
+	_frameFactory = [_sdkFactory newFrameFactory];
+	_pipeline = [_sdkFactory newPipeline];
 	
 	FrameView* frameView = _frameView;
 	_controlQueue = dispatch_queue_create("com.tsvb.videofilter-control", NULL);
 	_pipelineQueue = dispatch_queue_create("com.tsvb.camera-pipeline", NULL);
-    dispatch_queue_t mainQ = dispatch_get_main_queue();
+	dispatch_queue_t mainQ = dispatch_get_main_queue();
 	_capturer = [[SimpleCameraCapturer alloc] initWithQueue:_pipelineQueue OutputCallback:^(CMSampleBufferRef buffer) {
 		CVPixelBufferRef capturedFrame = CMSampleBufferGetImageBuffer(buffer);
 		NSDate* startTime = [NSDate now];
 		id<TSVBFrame> processedFrame = nil;
-		enum TSVBPipelineError error = TSVBPipelineErrorOk;
+		TSVBPipelineError error = TSVBPipelineErrorOk;
 		@synchronized (self->_pipeline) {
 			processedFrame = [self->_pipeline processCVPixelBuffer:capturedFrame error:&error];
 		}
@@ -97,13 +171,11 @@
 		[self enableReplaceBackground];
 		[self setFeatureButtonStateAsync:self->_replaceButton featureEnabled:self->_replaceEnabled];
 	}];
-    [_capturer start];
+	[_capturer start];
 	
 	_updateLabelTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 repeats:YES block:^(NSTimer* timer){
 		[self updateTimeAndFPSLabels];
 	}];
-    
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
 
 -(UIButton*)newButtonWithTitle:(NSString*)title action:(SEL)action
@@ -137,6 +209,8 @@
 	_beautificationButton = [self newButtonWithTitle:@"Beautification" action:@selector(toggleBeautification)];
 	_colorCorrectionButton = [self newButtonWithTitle:@"Color Correction" action:@selector(toggleColorCorrecton)];
 	_smartZoomButton = [self newButtonWithTitle:@"Auto Zoom" action:@selector(toggleSmartZoom)];
+	_lowLightButton = [self newButtonWithTitle:@"Adjust for Low Light" action:@selector(toggleLowLightAdjustment)];
+	_sharpeningButton = [self newButtonWithTitle:@"Sharpening" action:@selector(toggleSharpening)];
 	
 	NSArray<__kindof UIView*>* buttons = @[
 		_blurButton,
@@ -144,7 +218,9 @@
 		_denoiseButton,
 		_beautificationButton,
 		_colorCorrectionButton,
-		_smartZoomButton
+		_smartZoomButton,
+		_lowLightButton,
+		_sharpeningButton
 	];
 	
 	CGFloat width = 0;
@@ -208,7 +284,7 @@
 				self->_blurEnabled = NO;
 			}
 			else {
-				enum TSVBPipelineError error =
+				TSVBPipelineError error =
 					[self->_pipeline enableBlurBackgroundWithPower:0.3f];
 				self->_blurEnabled = TSVBPipelineErrorOk == error;
 			}
@@ -255,7 +331,7 @@
 				self->_denoiseEnabled = NO;
 			}
 			else {
-				enum TSVBPipelineError error =
+				TSVBPipelineError error =
 					[self->_pipeline enableDenoiseBackground];
 				self->_denoiseEnabled = TSVBPipelineErrorOk == error;
 				if (self->_denoiseEnabled) {
@@ -285,7 +361,7 @@
 		
 	@synchronized (self->_pipeline) {
 		id<TSVBReplacementController> controller;
-		enum TSVBPipelineError error =
+		TSVBPipelineError error =
 			[self->_pipeline enableReplaceBackground:&controller];
 		if (TSVBPipelineErrorOk == error) {
 			controller.background = background;
@@ -312,7 +388,7 @@
 				self->_beautificationEnabled = NO;
 			}
 			else {
-				enum TSVBPipelineError error =
+				TSVBPipelineError error =
 					[self->_pipeline enableBeautification];
 				self->_beautificationEnabled = TSVBPipelineErrorOk == error;
 			}
@@ -331,7 +407,7 @@
 				self->_colorCorrectionEnabled = NO;
 			}
 			else {
-				enum TSVBPipelineError error =
+				TSVBPipelineError error =
 					[self->_pipeline enableColorCorrection];
 				self->_colorCorrectionEnabled = TSVBPipelineErrorOk == error;
 			}
@@ -350,13 +426,54 @@
 				self->_smartZoomEnabled = NO;
 			}
 			else {
-				enum TSVBPipelineError error =
+				TSVBPipelineError error =
 					[self->_pipeline enableSmartZoom];
 				self->_smartZoomEnabled = TSVBPipelineErrorOk == error;
 			}
 		}
 		
 		[self setFeatureButtonStateAsync:self->_smartZoomButton featureEnabled:self->_smartZoomEnabled];
+	}];
+}
+
+-(void)toggleLowLightAdjustment
+{
+	[self dispatchControlActionWithDisabledControl:_lowLightButton action:^{
+		@synchronized (self->_pipeline) {
+			if (self->_lowLightEnabled) {
+				[self->_pipeline disableLowLightAdjustment];
+				self->_lowLightEnabled = NO;
+			}
+			else {
+				TSVBPipelineError error =
+					[self->_pipeline enableLowLightAdjustment];
+				self->_lowLightEnabled = TSVBPipelineErrorOk == error;
+				if (self->_lowLightEnabled) {
+					self->_pipeline.lowLightAdjustmentPower = 0.8f;
+				}
+			}
+		}
+		
+		[self setFeatureButtonStateAsync:self->_lowLightButton featureEnabled:self->_lowLightEnabled];
+	}];
+}
+
+-(void)toggleSharpening
+{
+	[self dispatchControlActionWithDisabledControl:_sharpeningButton action:^{
+		@synchronized (self->_pipeline) {
+			if (self->_sharpeningEnabled) {
+				[self->_pipeline disableSharpening];
+				self->_sharpeningEnabled = NO;
+			}
+			else {
+				TSVBPipelineError error =
+				[self->_pipeline enableSharpening];
+				self->_sharpeningEnabled = TSVBPipelineErrorOk == error;
+			}
+		}
+		
+		[self setFeatureButtonStateAsync:self->_sharpeningButton featureEnabled:self->_sharpeningEnabled];
 	}];
 }
 
